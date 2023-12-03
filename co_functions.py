@@ -6,7 +6,7 @@ import pprint
 # this file implements some of the functions from the BBOB benchmark, see 
 # http://coco.lri.fr/downloads/download15.02/bbobdocfunctions.pdf for details
 
-# generates random rotation matrix of size n
+# generates random rotation matrix of size n    
 def random_rotation_matrix(n):
     R = np.random.normal(size=(n,n))
     R, _ = np.linalg.qr(R)

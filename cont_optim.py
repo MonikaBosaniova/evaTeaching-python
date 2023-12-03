@@ -13,7 +13,7 @@ MUT_PROB = 0.2 # mutation probability
 MUT_STEP = 0.5 # size of the mutation steps
 REPEATS = 10 # number of runs of algorithm (should be at least 10)
 OUT_DIR = 'continuous' # output directory for logs
-EXP_ID = 'default' # the ID of this experiment (used to create log names)
+EXP_ID = 'ArithmeticCross' # the ID of this experiment (used to create log names)
 
 
 # creates the individual
@@ -45,6 +45,13 @@ def one_pt_cross(p1, p2):
     o2 = np.append(p2[:point], p1[point:])
     return o1, o2
 
+def arith_cross(p1,p2):
+    alpha = random.random()
+    o1 = p1 * alpha + p2 * (1-alpha)
+    o2 = p2 * alpha + p1 * (1-alpha)
+    return o1,o2
+
+
 # gaussian mutation - we need a class because we want to change the step
 # size of the mutation adaptively
 class Mutation:
@@ -53,6 +60,7 @@ class Mutation:
         self.step_size = step_size
 
     def __call__(self, ind):
+        
         return ind + self.step_size*np.random.normal(size=ind.shape)
 
 # applies a list of genetic operators (functions with 1 argument - population) 
@@ -128,7 +136,7 @@ if __name__ == '__main__':
     for fit_gen, fit_name in zip(fit_generators, fit_names):
         fit = fit_gen(DIMENSION)
         mutate_ind = Mutation(step_size=MUT_STEP)
-        xover = functools.partial(crossover, cross=one_pt_cross, cx_prob=CX_PROB)
+        xover = functools.partial(crossover, cross=arith_cross, cx_prob=CX_PROB)
         mut = functools.partial(mutation, mut_prob=MUT_PROB, mutate=mutate_ind)
 
         # run the algorithm `REPEATS` times and remember the best solutions from 
